@@ -15,10 +15,9 @@ build_exe_options = {
         "threading",
         "tarfile",
     ],
-    "excludes": ["tkinter", "PyQt6.QtSql"],
+    "excludes": ["tkinter"],
     "optimize": 2,
     "include_files": [("res", "res")],
-    "include_qt_plugins": ["platforms", "styles"],
 }
 
 if sys.platform == "darwin":
