@@ -20,6 +20,9 @@ build_exe_options = {
     "include_files": [("res", "res")],
 }
 
+if sys.platform == "darwin":
+    build_exe_options["bin_excludes"] = ["libiodbc.2.dylib"]
+
 base = None
 if sys.platform == "win32":
     base = "Win32GUI"
