@@ -15,13 +15,17 @@ build_exe_options = {
         "threading",
         "tarfile",
     ],
-    "excludes": ["tkinter"],
+    "excludes": ["tkinter", "PyQt6.QtSql"],
     "optimize": 2,
     "include_files": [("res", "res")],
+    "include_qt_plugins": ["platforms", "styles"],
 }
 
 if sys.platform == "darwin":
-    build_exe_options["bin_excludes"] = ["libiodbc.2.dylib"]
+    build_exe_options["bin_excludes"] = [
+        "libiodbc.2.dylib",
+        "libpq.5.dylib",
+    ]
 
 base = None
 if sys.platform == "win32":

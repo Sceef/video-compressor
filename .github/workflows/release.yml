@@ -48,7 +48,12 @@ jobs:
 
       - name: Install macOS dependencies
         if: runner.os == 'macOS'
-        run: brew install libiodbc
+        run: |
+          brew install libiodbc libpq
+          sudo mkdir -p /Applications/Postgres.app/Contents/Versions/14/lib
+          sudo ln -sf "$(brew --prefix libpq)/lib/libpq.5.dylib" /Applications/Postgres.app/Contents/Versions/14/lib/libpq.5.dylib
+          sudo mkdir -p /usr/local/opt/libiodbc/lib
+          sudo ln -sf "$(brew --prefix libiodbc)/lib/libiodbc.2.dylib" /usr/local/opt/libiodbc/lib/libiodbc.2.dylib
 
       - name: Install Python dependencies
         run: pip install -r requirements.txt
