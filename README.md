@@ -1,46 +1,69 @@
-## Cheezos Video Compressor
+## Video Compressor
 
-A no bullshit video compressor.
+A graphical video compressor — compress videos to a target file size.
+
+This project is a fork of [peanemis/video-compressor](https://github.com/peanemis/video-compressor).
+
+## What's different in this fork
+
+- **Output resolution selection** — choose 720p, 1080p, 1440p, or 2160p (default: 1080p)
+- **Downscale without upscale** — e.g. compress a 1440p source to 1080p for a smaller file at the same target size; sources smaller than the selected resolution are left unchanged
+- Works with both GPU and CPU encoding (software scale + hardware encode)
+
+Everything else from the original is preserved: queue compression, target size in MB, GPU acceleration (NVIDIA, Intel QuickSync, AMD), two-pass encoding, FFmpeg auto-install on Windows, and settings persistence.
 
 ## Features
 
-- Compresses multiple videos in a queue system
+- Compresses multiple videos in a queue
 - Target any specific output file size in MB
-- Supports GPU acceleration (NVIDIA, Intel QuickSync, AMD)
+- Output resolution: 720p / 1080p / 1440p / 2160p
+- GPU acceleration (NVIDIA, Intel QuickSync, AMD)
 - Automatically downloads and installs FFmpeg (Windows)
 - Progress tracking with detailed status updates
-- Supports multiple video formats (mp4, avi, mkv, mov, wmv, flv, webm, m4v)
+- Supports mp4, avi, mkv, mov, wmv, flv, webm, m4v
 - Two-pass encoding for optimal quality
 - Automatic bitrate calculation
 - Desktop notifications on completion
 - Preserves audio quality
-- Clean and simple user interface, no bullshit!
+- Simple user interface
 - Settings persistence between sessions
 - Auto-opens output folder when complete
 
-### New version on Patreon!
-
-[![Patreon](https://github.com/cheezos/video-compressor/blob/main/patreon.png)](https://www.patreon.com/cheezos/shop/cheezos-video-compressor-616355?utm_medium=clipboard_copy&utm_source=copyLink&utm_campaign=productshare_creator&utm_content=join_link)
-
 ## Build
 
-### Easy Way
+### Easy way
+
 1. Clone the repository.
-2. Run setup.bat
+2. Run `setup.bat`
 
-### Hard Way
-1. Open a terminal.
-2. Clone the repository with `git clone https://github.com/cheezos/video-compressor.git`
-3. Enter the project directory with `cd video-compressor`
-4. Create a virtual environment with `python -m venv .venv`
-5. Activate the virtual environment with `.\.venv\Scripts\activate`
-6. Install the required packages with `pip install -r requirements.txt`
-7. Build the application with `python setup.py build`
+### Manual
 
-### The Result
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Sceef/video-compressor.git
+   ```
+2. Enter the project directory:
+   ```bash
+   cd video-compressor
+   ```
+3. Create and activate a virtual environment:
+   ```bash
+   python -m venv .venv
+   .\.venv\Scripts\activate
+   ```
+4. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+5. Build the application:
+   ```bash
+   python setup.py build
+   ```
 
-![Preview](https://github.com/cheezos/video-compressor/blob/main/preview.png)
+### Preview
+
+![Preview](preview.png)
 
 ---
 
-Created with Python 3.12.6, PyQt6 and the latest FFmpeg.
+Built with Python 3.12, PyQt6, and FFmpeg.

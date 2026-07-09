@@ -2,7 +2,7 @@
 from src.rect import Rect
 
 
-WINDOW = Rect(0, 0, 250, 400)
+WINDOW = Rect(0, 0, 250, 430)
 WINDOW_HALF = Rect(0, 0, WINDOW.w // 2, WINDOW.h // 2)
 
 LABEL_STYLE = """
@@ -122,6 +122,20 @@ LINEEDIT_STYLE = """
     }
 """
 
+COMBOBOX_STYLE = """
+    QComboBox {
+        border: 1px solid black;
+        border-radius: 5px;
+        padding: 2px 5px;
+    }
+    QComboBox:focus {
+        border: 1px solid black;
+    }
+    QComboBox:hover {
+        border: 1px solid black;
+    }
+"""
+
 
 # Gaps
 H_GAP = 5  # Horizontal gap
@@ -177,6 +191,20 @@ GPU_CHECKBOX = Rect(
     25,
 )
 
+RESOLUTION_LABEL = Rect(
+    H_GAP,
+    GPU_LABEL.y + GPU_LABEL.h + V_GAP,
+    COMPRESS_BUTTON.w // 2,
+    25,
+)
+
+RESOLUTION_COMBO = Rect(
+    FILE_SIZE_ENTRY.x,
+    RESOLUTION_LABEL.y,
+    FILE_SIZE_ENTRY.w,
+    25,
+)
+
 PROGRESS_BAR = Rect(
     H_GAP,
     WINDOW.h - V_GAP - 25,
@@ -186,7 +214,7 @@ PROGRESS_BAR = Rect(
 
 LOG_AREA = Rect(
     H_GAP,
-    GPU_LABEL.y + GPU_LABEL.h + V_GAP,
+    RESOLUTION_LABEL.y + RESOLUTION_LABEL.h + V_GAP,
     WINDOW.w - (H_GAP * 2),
-    PROGRESS_BAR.y - (GPU_LABEL.y + GPU_LABEL.h + V_GAP * 2),
+    PROGRESS_BAR.y - (RESOLUTION_LABEL.y + RESOLUTION_LABEL.h + V_GAP * 2),
 )

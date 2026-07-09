@@ -15,6 +15,7 @@ from PyQt6.QtWidgets import (
     QLabel,
     QLineEdit,
     QCheckBox,
+    QComboBox,
     QProgressBar,
 )
 from PyQt6.QtGui import QIcon
@@ -102,6 +103,20 @@ class Window(QWidget):
         self.checkbox_gpu.move(GPU_CHECKBOX.x, GPU_CHECKBOX.y)
         self.checkbox_gpu.setChecked(self.settings["use_gpu"])
 
+        # Resolution Label
+        self.label_resolution = QLabel("Resolution", self)
+        self.label_resolution.resize(RESOLUTION_LABEL.w, RESOLUTION_LABEL.h)
+        self.label_resolution.move(RESOLUTION_LABEL.x, RESOLUTION_LABEL.y)
+
+        # Resolution Combo
+        self.combo_resolution = QComboBox(self)
+        self.combo_resolution.addItems(list(g.RESOLUTION_OPTIONS.keys()))
+        self.combo_resolution.resize(RESOLUTION_COMBO.w, RESOLUTION_COMBO.h)
+        self.combo_resolution.move(RESOLUTION_COMBO.x, RESOLUTION_COMBO.y)
+        self.combo_resolution.setCurrentText(
+            self.settings.get("output_resolution", "1080p")
+        )
+
         # Log Label
         self.label_log = QLabel(g.READY_TEXT, self)
         self.label_log.setEnabled(True)
@@ -125,6 +140,8 @@ class Window(QWidget):
         self.edit_size.setStyleSheet(LINEEDIT_STYLE)
         self.label_gpu.setStyleSheet(LABEL_STYLE)
         self.checkbox_gpu.setStyleSheet(CHECKBOX_STYLE)
+        self.label_resolution.setStyleSheet(LABEL_STYLE)
+        self.combo_resolution.setStyleSheet(COMBOBOX_STYLE)
         self.label_log.setStyleSheet(LABEL_LOG_STYLE)
         self.progress_bar.setStyleSheet(PROGRESS_BAR_STYLE)
 
@@ -134,6 +151,7 @@ class Window(QWidget):
         # Save settings when closing
         self.settings["target_size"] = float(self.edit_size.text())
         self.settings["use_gpu"] = self.checkbox_gpu.isChecked()
+        self.settings["output_resolution"] = self.combo_resolution.currentText()
         save_settings(self.settings)
         kill_ffmpeg()
 
@@ -153,6 +171,7 @@ class Window(QWidget):
         self.button_abort.setEnabled(False)
         self.button_abort.setStyleSheet(BUTTON_DISABLED_STYLE)
         self.edit_size.setEnabled(True)
+        self.combo_resolution.setEnabled(True)
         self.update_log(g.READY_TEXT)
         self.update_progress(0)
 
@@ -230,8 +249,12 @@ class Window(QWidget):
         self.button_select.setEnabled(False)
         self.button_compress.setEnabled(False)
         self.edit_size.setEnabled(False)
+        self.combo_resolution.setEnabled(False)
+        resolution_height = g.RESOLUTION_OPTIONS[self.combo_resolution.currentText()]
         self.compress_thread = CompressionThread(
-            float(self.edit_size.text()), self.checkbox_gpu.isChecked()
+            float(self.edit_size.text()),
+            self.checkbox_gpu.isChecked(),
+            resolution_height,
         )
         self.compress_thread.completed.connect(self.completed)
         self.compress_thread.update_log.connect(self.update_log)

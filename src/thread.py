@@ -68,10 +68,11 @@ class CompressionThread(QThread):
     update_progress = pyqtSignal(int)
     completed = pyqtSignal()
 
-    def __init__(self, target_size_mb, use_gpu, parent=None):
+    def __init__(self, target_size_mb, use_gpu, output_resolution_height, parent=None):
         super().__init__(parent)
         self.target_size_mb = target_size_mb
         self.use_gpu = use_gpu
+        self.output_resolution_height = output_resolution_height
         self.process = None
 
     def detect_gpu_encoder(self):
@@ -114,6 +115,7 @@ Queue: {len(g.completed) + 1}/{len(g.queue)}
 Pass: {i + 1}/2
 Target Size: {self.target_size_mb}MB
 Bitrate: {video_rate}k
+Resolution: {self.output_resolution_height}p
 Encoder: {encoder_type}
 """
 
@@ -134,6 +136,7 @@ Encoder: {encoder_type}
                 f'-i "{file_path}"',
                 "-y",
                 f"-b:v {bitrate_str}",
+                f"-vf scale=-2:{self.output_resolution_height}:force_original_aspect_ratio=decrease",
             ]
 
             if self.use_gpu and gpu_encoder:
