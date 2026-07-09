@@ -77,24 +77,7 @@ Everything else from the original is preserved: queue compression, target size i
    python setup.py build
    ```
 
-## Releases
-
-Pushing a version tag triggers a GitHub Actions workflow that builds and publishes artifacts for **Windows**, **Linux**, and **macOS**.
-
-```bash
-git tag v3.2.0
-git push origin v3.2.0
-```
-
-You can also run the workflow manually from the **Actions** tab (`workflow_dispatch`) to test builds without creating a release.
-
-Release artifacts:
-
-- `VideoCompressor-Windows-x64.zip`
-- `VideoCompressor-Linux-x64.tar.gz`
-- `VideoCompressor-macOS-arm64.tar.gz`
-
-### Preview
+## Preview
 
 ![Preview](preview.png)
 
