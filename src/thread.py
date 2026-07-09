@@ -127,34 +127,36 @@ Encoder: {encoder_type}
             output_path = os.path.join(
                 g.output_dir, f"{file_name_without_ext}-compressed.{original_ext}"
             )
+            temp_path = os.path.join(g.root_dir, "TEMP")
             print(f"New bitrate: {bitrate_str}")
             print(status_msg)
 
-            # Base command arguments
-            cmd_args = [
-                f'"{g.ffmpeg_path}"',
-                f'-i "{file_path}"',
+            cmd = [
+                g.ffmpeg_path,
+                "-i",
+                file_path,
                 "-y",
-                f"-b:v {bitrate_str}",
-                f"-vf scale=-2:{self.output_resolution_height}:force_original_aspect_ratio=decrease",
+                "-b:v",
+                bitrate_str,
+                "-vf",
+                f"scale=-2:{self.output_resolution_height}:force_original_aspect_ratio=decrease",
             ]
 
             if self.use_gpu and gpu_encoder:
                 print("Using GPU")
-                cmd_args.extend([f"-c:v {gpu_encoder}"])
+                cmd.extend(["-c:v", gpu_encoder])
             else:
                 print("Using CPU")
-                cmd_args.extend(["-c:v libx264"])
+                cmd.extend(["-c:v", "libx264"])
 
             if i == 0:
-                cmd_args.extend(["-an", "-pass 1", "-f mp4 TEMP"])
+                cmd.extend(["-an", "-pass", "1", "-f", "mp4", temp_path])
             else:
-                cmd_args.extend(["-pass 2", f'"{output_path}"'])
+                cmd.extend(["-pass", "2", output_path])
 
-            cmd = " ".join(cmd_args)
-            print(f"Running command: {cmd}")
+            print(f"Running command: {' '.join(cmd)}")
             self.update_log.emit(status_msg)
-            self.process = subprocess.check_call(cmd, shell=False)
+            self.process = subprocess.check_call(cmd)
 
     def run(self):
         g.completed = []

@@ -1,11 +1,11 @@
 import json
 import sys
 import os
-import os
 import psutil
 import src.globals as g
 from notifypy import Notify
 from src.download import DownloadThread
+from src.platform_utils import ffmpeg_paths, icon_path, open_folder
 from src.thread import CompressionThread
 from PyQt6.QtWidgets import (
     QApplication,
@@ -57,8 +57,9 @@ class Window(QWidget):
         self.settings = load_settings()
         self.setFixedSize(WINDOW.w, WINDOW.h)
         self.setWindowTitle(g.TITLE)
-        icon_path = os.path.join(g.res_dir, "icon.ico")
-        self.setWindowIcon(QIcon(icon_path))
+        icon = icon_path(g.res_dir)
+        if icon:
+            self.setWindowIcon(QIcon(icon))
 
         # Select Button
         self.button_select = QPushButton("Select Videos", self)
@@ -202,15 +203,14 @@ class Window(QWidget):
 
     def verify_ffmpeg(self):
         print("Verifying FFmpeg...")
-        FFMPEG_PATH = os.path.join(g.bin_dir, "ffmpeg.exe")
-        print(f"FFmpeg: {FFMPEG_PATH}")
-        FFPROBE_PATH = os.path.join(g.bin_dir, "ffprobe.exe")
-        print(f"FFprobe: {FFPROBE_PATH}")
+        ffmpeg_path, ffprobe_path = ffmpeg_paths(g.bin_dir)
+        print(f"FFmpeg: {ffmpeg_path}")
+        print(f"FFprobe: {ffprobe_path}")
 
-        if os.path.exists(FFMPEG_PATH) and os.path.exists(FFPROBE_PATH):
+        if os.path.exists(ffmpeg_path) and os.path.exists(ffprobe_path):
             g.ffmpeg_installed = True
-            g.ffmpeg_path = FFMPEG_PATH
-            g.ffprobe_path = FFPROBE_PATH
+            g.ffmpeg_path = ffmpeg_path
+            g.ffprobe_path = ffprobe_path
             self.reset()
         else:
             self.download_thread = DownloadThread()
@@ -273,13 +273,14 @@ class Window(QWidget):
 
     def installed(self):
         g.ffmpeg_installed = True
-        g.ffmpeg_path = os.path.join(g.bin_dir, "ffmpeg.exe")
-        g.ffprobe_path = os.path.join(g.bin_dir, "ffprobe.exe")
+        g.ffmpeg_path, g.ffprobe_path = ffmpeg_paths(g.bin_dir)
         self.reset()
         n = Notify()
         n.title = "FFmpeg installed!"
         n.message = "You can now compress your videos."
-        n.icon = os.path.join(g.res_dir, "icon.ico")
+        icon = icon_path(g.res_dir)
+        if icon:
+            n.icon = icon
         n.send()
 
     def completed(self, aborted=False):
@@ -291,11 +292,13 @@ class Window(QWidget):
         n.message = (
             "Your videos are ready." if not aborted else "Your videos are cooked!"
         )
-        n.icon = os.path.join(g.res_dir, "icon.ico")
+        icon = icon_path(g.res_dir)
+        if icon:
+            n.icon = icon
         n.send()
 
         if not aborted:
-            os.startfile(g.output_dir)
+            open_folder(g.output_dir)
 
 
 if __name__ == "__main__":
