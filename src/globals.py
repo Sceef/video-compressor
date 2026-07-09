@@ -1,4 +1,4 @@
-VERSION = "3.2.1"
+VERSION = "3.2.2"
 TITLE = f"CVC v{VERSION}"
 READY_TEXT = f"Select your videos to get started."
 RESOLUTION_OPTIONS = {
